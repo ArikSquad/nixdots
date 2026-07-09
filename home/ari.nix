@@ -25,18 +25,45 @@
       tree
       zoxide
       ghostty
+      xdg-terminal-exec
       # desktop apps, move away from here tbh or idk does it even matter?
       nodejs_26
       bun
       vesktop
       kdePackages.dolphin
+      jetbrains-toolbox
+      prismlauncher
       steam
       t3code
     ];
+    sessionVariables = {
+      TERMINAL = "ghostty";
+    };
   };
 
   programs.home-manager.enable = true;
   fonts.fontconfig.enable = true;
+
+  xdg.configFile = {
+    "nvim" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixdots/config/nvim";
+      recursive = false;
+    };
+    "xdg-terminals.list".text = ''
+      com.mitchellh.ghostty.desktop
+    '';
+  };
+
+  home.pointerCursor = {
+    enable = true;
+    package = pkgs.whitesur-cursors;
+    name = "WhiteSur-cursors";
+    size = 24;
+
+    gtk.enable = true;
+    x11.enable = true;
+    hyprcursor.enable = true;
+  };
 
   programs.caelestia = {
     enable = true;
@@ -48,6 +75,9 @@
     settings = {
       general.apps.explorer = [
         "dolphin"
+      ];
+      general.apps.terminal = [
+        "ghostty"
       ];
       appearance.transparency.enabled = true;
       bar.status.showBattery = false;
@@ -75,8 +105,8 @@
   #    };
   #    general = {
   #      gaps_in = 4;
- #       gaps_out = 8;
- #       border_size = 2;
+  #       gaps_out = 8;
+  #       border_size = 2;
   #      layout = "dwindle";
   #    };
   #    decoration = {
@@ -127,7 +157,7 @@
 
   programs.git = {
     enable = true;
-    package = pkgs.git.override { withLibsecret = true; };
+    package = pkgs.git.override {withLibsecret = true;};
     userName = "ArikSquad";
     userEmail = "75741608+ArikSquad@users.noreply.github.com";
     extraConfig = {
@@ -143,6 +173,7 @@
     defaultEditor = true;
     viAlias = true;
     vimAlias = true;
+    sideloadInitLua = true;
     extraPackages = with pkgs; [
       lua-language-server
       nil
@@ -150,56 +181,5 @@
       bash-language-server
       stylua
     ];
-    plugins = with pkgs.vimPlugins; [
-      blink-cmp
-      conform-nvim
-      fzf-lua
-      gitsigns-nvim
-      kanagawa-nvim
-      lualine-nvim
-      mini-nvim
-      nvim-lspconfig
-      nvim-treesitter.withAllGrammars
-      oil-nvim
-      snacks-nvim
-      which-key-nvim
-    ];
-    extraLuaConfig = ''
-      vim.g.mapleader = " "
-      vim.opt.number = true
-      vim.opt.relativenumber = true
-      vim.opt.signcolumn = "yes"
-      vim.opt.termguicolors = true
-      vim.opt.updatetime = 250
-      vim.opt.expandtab = true
-      vim.opt.shiftwidth = 2
-      vim.opt.tabstop = 2
-      vim.cmd.colorscheme("kanagawa")
-
-      require("mini.icons").setup()
-      require("oil").setup()
-      require("gitsigns").setup()
-      require("which-key").setup()
-      require("lualine").setup({ options = { theme = "auto" } })
-      require("fzf-lua").setup()
-      require("blink.cmp").setup()
-      require("conform").setup({
-        formatters_by_ft = {
-          lua = { "stylua" },
-          nix = { "alejandra" },
-        },
-      })
-
-      local lsp = require("lspconfig")
-      lsp.nil_ls.setup({})
-      lsp.nixd.setup({})
-      lsp.lua_ls.setup({})
-      lsp.bashls.setup({})
-
-      vim.keymap.set("n", "<leader>e", "<cmd>Oil<cr>")
-      vim.keymap.set("n", "<leader>f", require("fzf-lua").files)
-      vim.keymap.set("n", "<leader>g", require("fzf-lua").live_grep)
-      vim.keymap.set("n", "<leader>w", "<cmd>w<cr>")
-    '';
   };
 }

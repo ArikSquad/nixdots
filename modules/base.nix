@@ -67,6 +67,7 @@
     age
     alejandra
     btop
+    polkit_gnome
     curl
     fastfetch
     fd
