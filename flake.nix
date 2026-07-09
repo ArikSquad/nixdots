@@ -1,0 +1,51 @@
+{
+  description = "Small NixOS Hyprland/Caelestia starter config";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    caelestia-shell = {
+      url = "github:caelestia-dots/shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    helium = {
+      url = "github:oxcl/nix-flake-helium-browser";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs = inputs @ {
+    nixpkgs,
+    home-manager,
+    ...
+  }: let
+    system = "x86_64-linux";
+    username = "ari";
+    hostname = "nixbox";
+  in {
+    nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
+      inherit system;
+      specialArgs = {
+        inherit inputs username hostname;
+      };
+      modules = [
+        ./hosts/${hostname}/configuration.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = {
+            inherit inputs username hostname;
+          };
+          home-manager.users.${username} = import ./home/${username}.nix;
+        }
+      ];
+    };
+  };
+}
