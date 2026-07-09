@@ -24,6 +24,12 @@
       starship
       tree
       zoxide
+      ghostty
+      # desktop apps, move away from here tbh or idk does it even matter?
+      nodejs_26
+      bun
+      vesktop
+      kdePackages.dolphin
     ];
   };
 
@@ -38,78 +44,84 @@
       target = "graphical-session.target";
     };
     settings = {
-      bar.status.showBattery = true;
+      general.apps.explorer = [
+        "dolphin"
+      ];
+      appearance.transparency.enabled = true;
+      bar.status.showBattery = false;
       paths.wallpaperDir = "${config.home.homeDirectory}/Pictures/Wallpapers";
     };
     cli.settings.theme.enableGtk = true;
   };
 
-  wayland.windowManager.hyprland = {
-    enable = true;
-    systemd.enable = false;
-    settings = {
-      "$mod" = "SUPER";
-      monitor = ",preferred,auto,1";
-      exec-once = [
-        "uwsm finalize"
-        "swww-daemon"
-        "wl-paste --type text --watch cliphist store"
-        "wl-paste --type image --watch cliphist store"
-      ];
-      input = {
-        kb_layout = "us";
-        follow_mouse = 1;
-        touchpad.natural_scroll = true;
-      };
-      general = {
-        gaps_in = 4;
-        gaps_out = 8;
-        border_size = 2;
-        layout = "dwindle";
-      };
-      decoration = {
-        rounding = 8;
-        blur = {
-          enabled = true;
-          size = 4;
-          passes = 2;
-        };
-      };
-      animations.enabled = true;
-      bind = [
-        "$mod, Return, exec, foot"
-        "$mod, B, exec, helium"
-        "$mod, D, exec, caelestia shell drawers toggle launcher"
-        "$mod, Q, killactive"
-        "$mod SHIFT, E, exec, wlogout"
-        "$mod, F, fullscreen"
-      ];
-    };
-  };
+  #wayland.windowManager.hyprland = {
+  #  enable = true;
+  #  systemd.enable = false;
+  #  settings = {
+  #    "$mod" = "SUPER";
+  #    monitor = ",preferred,auto,1";
+  #    exec-once = [
+  #      "uwsm finalize"
+  #      "swww-daemon"
+  #      "wl-paste --type text --watch cliphist store"
+  #      "wl-paste --type image --watch cliphist store"
+  #    ];
+  #    input = {
+  #      kb_layout = "fi";
+  #      follow_mouse = 1;
+  #      touchpad.natural_scroll = true;
+  #    };
+  #    general = {
+  #      gaps_in = 4;
+ #       gaps_out = 8;
+ #       border_size = 2;
+  #      layout = "dwindle";
+  #    };
+  #    decoration = {
+  #      rounding = 8;
+  #      blur = {
+  #        enabled = true;
+  #        size = 4;
+  #        passes = 2;
+  #      };
+  #    };
+  #    animations.enabled = true;
+  #    bind = [
+  #      "$mod, Return, exec, foot"
+  #      "$mod, B, exec, helium"
+  #      "$mod, D, exec, caelestia shell drawers toggle launcher"
+  #      "$mod, Q, killactive"
+  #      "$mod SHIFT, E, exec, wlogout"
+  #      "$mod, F, fullscreen"
+  #    ];
+  #  };
+  #};
 
-  programs.foot = {
-    enable = true;
-    settings = {
-      main = {
-        font = "CaskaydiaCove Nerd Font:size=11";
-        pad = "8x8";
-      };
-    };
-  };
+  # we trust in caelestia
+  #programs.foot = {
+  #  enable = true;
+  #  settings = {
+  #    main = {
+  #      font = "CaskaydiaCove Nerd Font:size=11";
+  #      pad = "8x8";
+  #    };
+  #  };
+  #};
 
-  programs.fish = {
-    enable = true;
-    interactiveShellInit = ''
-      set fish_greeting
-      zoxide init fish | source
-      starship init fish | source
-    '';
-    shellAliases = {
-      ls = "eza --icons=auto --group-directories-first";
-      ll = "eza -lah --icons=auto --group-directories-first";
-      rebuild = "sudo nixos-rebuild switch --flake ~/nixdots#nixbox";
-    };
-  };
+  # we trust in caelestia
+  #programs.fish = {
+  #  enable = true;
+  #  interactiveShellInit = ''
+  #    set fish_greeting
+  #    zoxide init fish | source
+  #    starship init fish | source
+  #  '';
+  #  shellAliases = {
+  #    ls = "eza --icons=auto --group-directories-first";
+  #    ll = "eza -lah --icons=auto --group-directories-first";
+  #    rebuild = "sudo nixos-rebuild switch --flake ~/nixdots#nixbox";
+  #  };
+  #};
 
   programs.git = {
     enable = true;
@@ -131,7 +143,7 @@
       lua-language-server
       nil
       nixd
-      nodePackages.bash-language-server
+      bash-language-server
       stylua
     ];
     plugins = with pkgs.vimPlugins; [
