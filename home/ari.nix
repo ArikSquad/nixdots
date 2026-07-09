@@ -30,6 +30,8 @@
       bun
       vesktop
       kdePackages.dolphin
+      steam
+      t3code
     ];
   };
 
@@ -125,12 +127,14 @@
 
   programs.git = {
     enable = true;
-    userName = "Ari";
-    userEmail = "ari@example.com";
+    package = pkgs.git.override { withLibsecret = true; };
+    userName = "ArikSquad";
+    userEmail = "75741608+ArikSquad@users.noreply.github.com";
     extraConfig = {
       init.defaultBranch = "main";
-      pull.rebase = true;
+      #pull. = true;
       push.autoSetupRemote = true;
+      credential.helper = "libsecret";
     };
   };
 

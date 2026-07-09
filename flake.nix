@@ -28,7 +28,21 @@
     system = "x86_64-linux";
     username = "ari";
     hostname = "nixbox";
+    overlay = final: prev: {
+      t3code = final.callPackage ./pkgs/t3code.nix {};
+    };
+    pkgs = import nixpkgs {
+      inherit system;
+      overlays = [overlay];
+    };
   in {
+    overlays.default = overlay;
+
+    packages.${system} = {
+      t3code = pkgs.t3code;
+      default = pkgs.t3code;
+    };
+
     nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
       inherit system;
       specialArgs = {
@@ -38,6 +52,7 @@
         ./hosts/${hostname}/configuration.nix
         home-manager.nixosModules.home-manager
         {
+          nixpkgs.overlays = [overlay];
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {

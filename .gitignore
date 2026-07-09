@@ -4,4 +4,4 @@ result-*
 *.iso
 .direnv
 .env
-hosts/nixbox/hardware-configuration.nix
+
