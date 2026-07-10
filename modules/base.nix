@@ -37,6 +37,19 @@
     layout = "fi";
     variant = "";
   };
+   # lowkey i dont like this here?
+  services.mongodb = {
+    enable = true;
+    package = pkgs.mongodb-ce;
+    enableAuth = false;
+    bind_ip = "0.0.0.0";
+  };
+  # lowkey also annoying to have this always running in the bg
+  services.redis.servers."myredis" = {
+    enable = true;
+    port = 6379;
+  };
+
   console.keyMap = "fi";
 
   services = {

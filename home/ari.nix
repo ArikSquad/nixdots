@@ -28,6 +28,7 @@
       xdg-terminal-exec
       # desktop apps, move away from here tbh or idk does it even matter?
       nodejs_26
+      jdk25
       bun
       vesktop
       kdePackages.dolphin
@@ -35,11 +36,20 @@
       prismlauncher
       steam
       t3code
+      mongodb-compass
+      spotify # unfree software !!!
     ];
     sessionVariables = {
       TERMINAL = "ghostty";
     };
+    sessionPath = [
+      "${config.home.homeDirectory}/.npm-global/bin"
+    ];
   };
+
+  home.file.".npmrc".text = ''
+    prefix=${config.home.homeDirectory}/.npm-global
+  '';
 
   programs.home-manager.enable = true;
   fonts.fontconfig.enable = true;
@@ -52,6 +62,11 @@
     "xdg-terminals.list".text = ''
       com.mitchellh.ghostty.desktop
     '';
+    "caelestia/hypr-user.lua" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixdots/config/caelestia/hypr-user.lua";
+      recursive = false; # it's a file 
+      force = true;
+    };
   };
 
   home.pointerCursor = {
