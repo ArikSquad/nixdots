@@ -14,42 +14,38 @@
     homeDirectory = "/home/${username}";
     stateVersion = "26.05";
     packages = with pkgs; [
-      bat
-      eza
-      fzf
-      gitui
-      lazygit
-      nerd-fonts.caskaydia-cove
-      ripgrep
-      starship
-      tree
-      zoxide
-      xdg-terminal-exec
+        bat
+        eza
+        fzf
+        gitui
+        lazygit
+        nerd-fonts.caskaydia-cove
+        ripgrep
+        starship
+        tree
+        zoxide
+        xdg-terminal-exec
 
-      # dev tools (home to devShell)
-      nodejs_26
-      jdk25
-      bun
+        # dev tools
+        nodejs_26
+        jdk25
+        bun
 
-      cargo
-      gcc
-      pkg-config
-      rust-analyzer
-      rustc
-      rustfmt
+        # C dev
+        gcc
 
+        # desktop apps
+        ghostty
+        vesktop
+        kdePackages.dolphin
+        jetbrains-toolbox
+        prismlauncher
+        steam
+        t3code
+        mongodb-compass
+        spotify # unfree software !!!
+      ];
 
-      # desktop apps
-      ghostty
-      vesktop
-      kdePackages.dolphin
-      jetbrains-toolbox
-      prismlauncher
-      steam
-      t3code
-      mongodb-compass
-      spotify # unfree software !!!
-    ];
     sessionVariables = {
       TERMINAL = "ghostty";
       NPM_CONFIG_PREFIX = "${config.home.homeDirectory}/.npm-global";
