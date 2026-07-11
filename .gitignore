@@ -4,4 +4,4 @@ result-*
 *.iso
 .direnv
 .env
-
+.idea/

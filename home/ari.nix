@@ -10,7 +10,7 @@
   ];
 
   home = {
-    username = username;
+    inherit username;
     homeDirectory = "/home/${username}";
     stateVersion = "26.05";
     packages = with pkgs; [
@@ -24,12 +24,23 @@
       starship
       tree
       zoxide
-      ghostty
       xdg-terminal-exec
-      # desktop apps, move away from here tbh or idk does it even matter?
+
+      # dev tools (home to devShell)
       nodejs_26
       jdk25
       bun
+
+      cargo
+      gcc
+      pkg-config
+      rust-analyzer
+      rustc
+      rustfmt
+
+
+      # desktop apps
+      ghostty
       vesktop
       kdePackages.dolphin
       jetbrains-toolbox
@@ -41,7 +52,9 @@
     ];
     sessionVariables = {
       TERMINAL = "ghostty";
+      NPM_CONFIG_PREFIX = "${config.home.homeDirectory}/.npm-global";
     };
+
     sessionPath = [
       "${config.home.homeDirectory}/.npm-global/bin"
     ];
@@ -101,83 +114,15 @@
     cli.settings.theme.enableGtk = true;
   };
 
-  #wayland.windowManager.hyprland = {
-  #  enable = true;
-  #  systemd.enable = false;
-  #  settings = {
-  #    "$mod" = "SUPER";
-  #    monitor = ",preferred,auto,1";
-  #    exec-once = [
-  #      "uwsm finalize"
-  #      "swww-daemon"
-  #      "wl-paste --type text --watch cliphist store"
-  #      "wl-paste --type image --watch cliphist store"
-  #    ];
-  #    input = {
-  #      kb_layout = "fi";
-  #      follow_mouse = 1;
-  #      touchpad.natural_scroll = true;
-  #    };
-  #    general = {
-  #      gaps_in = 4;
-  #       gaps_out = 8;
-  #       border_size = 2;
-  #      layout = "dwindle";
-  #    };
-  #    decoration = {
-  #      rounding = 8;
-  #      blur = {
-  #        enabled = true;
-  #        size = 4;
-  #        passes = 2;
-  #      };
-  #    };
-  #    animations.enabled = true;
-  #    bind = [
-  #      "$mod, Return, exec, foot"
-  #      "$mod, B, exec, helium"
-  #      "$mod, D, exec, caelestia shell drawers toggle launcher"
-  #      "$mod, Q, killactive"
-  #      "$mod SHIFT, E, exec, wlogout"
-  #      "$mod, F, fullscreen"
-  #    ];
-  #  };
-  #};
-
-  # we trust in caelestia
-  #programs.foot = {
-  #  enable = true;
-  #  settings = {
-  #    main = {
-  #      font = "CaskaydiaCove Nerd Font:size=11";
-  #      pad = "8x8";
-  #    };
-  #  };
-  #};
-
-  # we trust in caelestia
-  #programs.fish = {
-  #  enable = true;
-  #  interactiveShellInit = ''
-  #    set fish_greeting
-  #    zoxide init fish | source
-  #    starship init fish | source
-  #  '';
-  #  shellAliases = {
-  #    ls = "eza --icons=auto --group-directories-first";
-  #    ll = "eza -lah --icons=auto --group-directories-first";
-  #    rebuild = "sudo nixos-rebuild switch --flake ~/nixdots#nixbox";
-  #  };
-  #};
-
   programs.git = {
     enable = true;
     package = pkgs.git.override {withLibsecret = true;};
-    userName = "ArikSquad";
-    userEmail = "75741608+ArikSquad@users.noreply.github.com";
-    extraConfig = {
+    settings = {
+      user = {
+        name = "ArikSquad";
+        email = "75741608+ArikSquad@users.noreply.github.com";
+      };
       init.defaultBranch = "main";
-      #pull. = true;
       push.autoSetupRemote = true;
       credential.helper = "libsecret";
     };

@@ -38,7 +38,7 @@
     qt6.qtwayland
     slurp
     swappy
-    swww
+    awww
     wl-clipboard
     wlogout
   ];

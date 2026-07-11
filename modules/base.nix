@@ -45,7 +45,7 @@
     bind_ip = "0.0.0.0";
   };
   # lowkey also annoying to have this always running in the bg
-  services.redis.servers."myredis" = {
+  services.redis.servers.myredis = {
     enable = true;
     port = 6379;
   };

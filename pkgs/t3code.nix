@@ -2,9 +2,11 @@
   appimageTools,
   fetchurl,
   lib,
+  makeDesktopItem,
+  symlinkJoin,
 }:
 
-appimageTools.wrapType2 rec {
+let
   pname = "t3code";
   version = "0.0.28";
 
@@ -13,10 +15,35 @@ appimageTools.wrapType2 rec {
     hash = "sha256-+mBp+wPrJRV/HpaimQHcqBuwqZcPWTbKJVNCVW7ELgo=";
   };
 
-  meta = {
+  app = appimageTools.wrapType2 {
+    inherit pname version src;
+  };
+
+  desktopItem = makeDesktopItem {
+    name = pname;
+    desktopName = "T3 Code";
+    genericName = "Code Editor";
+    comment = "T3 Code desktop app";
+    exec = "${pname} %U";
+    icon = pname;
+    categories = [
+      "Development"
+      "IDE"
+    ];
+    startupNotify = true;
+  };
+in
+symlinkJoin {
+  inherit pname version;
+  paths = [
+    app
+    desktopItem
+  ];
+
+  meta = with lib; {
     description = "T3 Code desktop app";
     homepage = "https://github.com/pingdotgg/t3code";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     mainProgram = "t3code";
     platforms = ["x86_64-linux"];
   };
