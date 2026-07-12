@@ -13,6 +13,7 @@
     ../../modules/desktop/hyprland.nix
     ../../modules/programs/fish.nix
     ../../modules/programs/helium.nix
+    ../../modules/programs/steam.nix
   ];
 
   networking.hostName = hostname;
