@@ -4,7 +4,8 @@
   pkgs,
   username,
   ...
-}: {
+}:
+{
   imports = [
     inputs.caelestia-shell.homeManagerModules.default
   ];
@@ -14,37 +15,40 @@
     homeDirectory = "/home/${username}";
     stateVersion = "26.05";
     packages = with pkgs; [
-        bat
-        eza
-        fzf
-        gitui
-        lazygit
-        nerd-fonts.caskaydia-cove
-        ripgrep
-        starship
-        tree
-        zoxide
-        xdg-terminal-exec
+      bat
+      eza
+      fzf
+      gitui
+      lazygit
+      nerd-fonts.caskaydia-cove
+      ripgrep
+      starship
+      tree
+      zoxide
+      xdg-terminal-exec
 
-        # dev tools
-        nodejs_26
-        jdk25
-        bun
+      # dev tools
+      nodejs_26
+      jdk25
+      bun
 
-        # C dev
-        gcc
+      # C dev
+      gcc
 
-        # desktop apps
-        ghostty
-        vesktop
-        kdePackages.dolphin
-        jetbrains-toolbox
-        prismlauncher
-        steam
-        t3code
-        mongodb-compass
-        spotify # unfree software !!!
-      ];
+      # nix
+      nixfmt
+
+      # desktop apps
+      ghostty
+      vesktop
+      kdePackages.dolphin
+      jetbrains-toolbox
+      prismlauncher
+      steam
+      t3code
+      mongodb-compass
+      spotify # unfree software !!!
+    ];
 
     sessionVariables = {
       TERMINAL = "ghostty";
@@ -73,7 +77,7 @@
     '';
     "caelestia/hypr-user.lua" = {
       source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixdots/config/caelestia/hypr-user.lua";
-      recursive = false; # it's a file 
+      recursive = false; # it's a file
       force = true;
     };
   };
@@ -110,9 +114,16 @@
     cli.settings.theme.enableGtk = true;
   };
 
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
+    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+  };
+
   programs.git = {
     enable = true;
-    package = pkgs.git.override {withLibsecret = true;};
+    package = pkgs.git.override { withLibsecret = true; };
     settings = {
       user = {
         name = "ArikSquad";

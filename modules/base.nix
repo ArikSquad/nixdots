@@ -1,7 +1,10 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   nix = {
     settings = {
-      experimental-features = ["nix-command" "flakes"];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
       auto-optimise-store = true;
     };
     gc = {
@@ -37,7 +40,7 @@
     layout = "fi";
     variant = "";
   };
-   # lowkey i dont like this here?
+  # lowkey i dont like this here?
   services.mongodb = {
     enable = true;
     package = pkgs.mongodb-ce;
@@ -73,7 +76,7 @@
 
   xdg.portal = {
     enable = true;
-    extraPortals = [pkgs.xdg-desktop-portal-gtk];
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   };
 
   environment.systemPackages = with pkgs; [

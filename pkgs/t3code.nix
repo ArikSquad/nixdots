@@ -45,6 +45,6 @@ symlinkJoin {
     homepage = "https://github.com/pingdotgg/t3code";
     license = licenses.mit;
     mainProgram = "t3code";
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
   };
 }

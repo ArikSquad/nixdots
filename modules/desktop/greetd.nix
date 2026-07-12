@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   services.greetd = {
     enable = true;
     settings = {
@@ -9,5 +9,5 @@
     };
   };
 
-  environment.systemPackages = [pkgs.tuigreet];
+  environment.systemPackages = [ pkgs.tuigreet ];
 }

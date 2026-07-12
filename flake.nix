@@ -20,47 +20,50 @@
     };
   };
 
-  outputs = inputs @ {
-    nixpkgs,
-    home-manager,
-    ...
-  }: let
-    system = "x86_64-linux";
-    username = "ari";
-    hostname = "nixbox";
-    overlay = final: prev: {
-      t3code = final.callPackage ./pkgs/t3code.nix {};
-    };
-    pkgs = import nixpkgs {
-      inherit system;
-      overlays = [overlay];
-    };
-  in {
-    overlays.default = overlay;
-
-    packages.${system} = {
-      t3code = pkgs.t3code;
-      default = pkgs.t3code;
-    };
-
-    nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
-      inherit system;
-      specialArgs = {
-        inherit inputs username hostname;
+  outputs =
+    inputs@{
+      nixpkgs,
+      home-manager,
+      ...
+    }:
+    let
+      system = "x86_64-linux";
+      username = "ari";
+      hostname = "nixbox";
+      overlay = final: prev: {
+        t3code = final.callPackage ./pkgs/t3code.nix { };
       };
-      modules = [
-        ./hosts/${hostname}/configuration.nix
-        home-manager.nixosModules.home-manager
-        {
-          nixpkgs.overlays = [overlay];
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = {
-            inherit inputs username hostname;
-          };
-          home-manager.users.${username} = import ./home/${username}.nix;
-        }
-      ];
+      pkgs = import nixpkgs {
+        inherit system;
+        overlays = [ overlay ];
+      };
+    in
+    {
+      overlays.default = overlay;
+
+      packages.${system} = {
+        t3code = pkgs.t3code;
+        default = pkgs.t3code;
+      };
+
+      nixosConfigurations.${hostname} = nixpkgs.lib.nixosSystem {
+        inherit system;
+        specialArgs = {
+          inherit inputs username hostname;
+        };
+        modules = [
+          ./hosts/${hostname}/configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            nixpkgs.overlays = [ overlay ];
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = {
+              inherit inputs username hostname;
+            };
+            home-manager.users.${username} = import ./home/${username}.nix;
+          }
+        ];
+      };
     };
-  };
 }
