@@ -8,6 +8,7 @@
 {
   imports = [
     inputs.caelestia-shell.homeManagerModules.default
+    inputs.spicetify-nix.homeManagerModules.spicetify
   ];
 
   home = {
@@ -57,7 +58,6 @@
       prismlauncher
       t3code
       mongodb-compass
-      spotify # unfree software !!!
     ];
 
     sessionVariables = {
@@ -75,6 +75,7 @@
   '';
 
   programs.home-manager.enable = true;
+  programs.spicetify.enable = true;
   fonts.fontconfig.enable = true;
 
   xdg.configFile = {

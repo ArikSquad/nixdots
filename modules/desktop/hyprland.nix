@@ -12,7 +12,7 @@
     gnome.gnome-keyring.enable = true;
   };
 
-  security.pam.services.greetd.enableGnomeKeyring = true;
+  security.pam.services.sddm.enableGnomeKeyring = true;
 
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";

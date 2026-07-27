@@ -10,7 +10,7 @@
     ../../modules/base.nix
     ../../modules/boot/limine.nix
     ../../modules/boot/plymouth.nix
-    ../../modules/desktop/greetd.nix
+    ../../modules/desktop/sddm.nix
     ../../modules/desktop/hyprland.nix
     ../../modules/programs/fish.nix
     ../../modules/programs/helium.nix
