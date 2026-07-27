@@ -9,6 +9,7 @@
     ./hardware-configuration.nix
     ../../modules/base.nix
     ../../modules/boot/limine.nix
+    ../../modules/boot/plymouth.nix
     ../../modules/desktop/greetd.nix
     ../../modules/desktop/hyprland.nix
     ../../modules/programs/fish.nix

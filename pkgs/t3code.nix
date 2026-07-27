@@ -8,11 +8,11 @@
 
 let
   pname = "t3code";
-  version = "0.0.28";
+  version = "0.0.29-nightly.20260727.923"; # just a pinned snapshot, no specific reason I chose this
 
   src = fetchurl {
     url = "https://github.com/pingdotgg/t3code/releases/download/v${version}/T3-Code-${version}-x86_64.AppImage";
-    hash = "sha256-+mBp+wPrJRV/HpaimQHcqBuwqZcPWTbKJVNCVW7ELgo=";
+    hash = "sha256-18ELwJLQgtOodf6pNWp6YeafYUlefo5nj7WxfsyP8YY=";
   };
 
   app = appimageTools.wrapType2 {
@@ -39,6 +39,10 @@ symlinkJoin {
     app
     desktopItem
   ];
+  postBuild = ''
+    install -Dm644 ${./t3code.png} \
+      $out/share/icons/hicolor/512x512/apps/t3code.png
+  '';
 
   meta = with lib; {
     description = "T3 Code desktop app";

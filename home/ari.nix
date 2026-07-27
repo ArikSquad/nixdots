@@ -35,6 +35,17 @@
       # C dev
       gcc
 
+      # Rust dev
+      cargo
+      cargo-tauri
+      clippy
+      rust-analyzer
+      rustc
+      rustfmt
+
+      # aseprite
+      aseprite
+
       # nix
       nixfmt
 
