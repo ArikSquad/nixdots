@@ -5,6 +5,36 @@
   username,
   ...
 }:
+let
+  screenshot-select = pkgs.writeShellApplication {
+    name = "screenshot-select";
+    runtimeInputs = with pkgs; [
+      coreutils
+      grim
+      hyprland
+      jq
+      libnotify
+      slurp
+      wl-clipboard
+    ];
+    text = ''
+      windows="$(
+        hyprctl clients -j |
+          jq -r '.[] | select(.mapped) | "\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"'
+      )"
+
+      geometry="$(slurp -d <<< "$windows")" || exit 0
+
+      screenshot_dir="''${XDG_PICTURES_DIR:-$HOME/Pictures}/Screenshots"
+      mkdir -p "$screenshot_dir"
+      destination="$screenshot_dir/$(date +%Y-%m-%d_%H-%M-%S).png"
+
+      grim -g "$geometry" - | tee "$destination" | wl-copy
+      notify-send -a screenshot-select -i "$destination" "Screenshot captured" \
+        "Saved to $destination and copied to the clipboard"
+    '';
+  };
+in
 {
   imports = [
     inputs.caelestia-shell.homeManagerModules.default
@@ -27,6 +57,7 @@
       tree
       zoxide
       xdg-terminal-exec
+      screenshot-select
 
       # dev tools
       nodejs_26
@@ -35,6 +66,12 @@
 
       # C dev
       gcc
+
+      # GitHub CLI
+      gh
+
+      # ai slopfest
+      opencode
 
       # Rust dev
       cargo
@@ -89,6 +126,11 @@
     "caelestia/hypr-user.lua" = {
       source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixdots/config/caelestia/hypr-user.lua";
       recursive = false; # it's a file
+      force = true;
+    };
+    "caelestia/hypr-vars.lua" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixdots/config/caelestia/hypr-vars.lua";
+      recursive = false;
       force = true;
     };
   };

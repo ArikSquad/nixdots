@@ -18,3 +18,9 @@ hl.monitor({
     position = "6000x0",
     scale = 1,
 })
+
+-- default picker is feature-rich but slow to appear. These bindings use
+-- hyprshot directly while retaining both automatic saving and clipboard copy.
+hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m output -m active"))
+hl.bind("SUPER + SHIFT + S", hl.dsp.exec_cmd("screenshot-select"))
+hl.bind("SUPER + SHIFT + ALT + S", hl.dsp.exec_cmd("hyprshot -m region"))
