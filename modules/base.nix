@@ -40,6 +40,7 @@
     layout = "fi";
     variant = "";
   };
+
   # lowkey i dont like this here?
   services.mongodb = {
     enable = true;
@@ -47,6 +48,7 @@
     enableAuth = false;
     bind_ip = "0.0.0.0";
   };
+
   # lowkey also annoying to have this always running in the bg
   services.redis.servers.myredis = {
     enable = true;
@@ -65,6 +67,26 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+      wireplumber.extraConfig."51-rig-volume-fix" = {
+        "monitor.alsa.rules" = [
+          {
+            matches = [
+              {
+                "device.name" =
+                  "alsa_card.usb-Nacon_RIG_600_PRO_R00300000003-01";
+              }
+            ];
+
+            actions = {
+              update-props = {
+                "api.alsa.soft-mixer" = true;
+                "api.alsa.ignore-dB" = true;
+                "device.nick" = "RIG 600 PRO — software mixer";
+              };
+            };
+          }
+        ];
+      };
     };
   };
 
