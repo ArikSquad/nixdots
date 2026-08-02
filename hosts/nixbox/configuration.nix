@@ -17,7 +17,10 @@
     ../../modules/programs/steam.nix
   ];
 
-  networking.hostName = hostname;
+  networking = {
+    hostName = hostname;
+    firewall.allowedTCPPorts = [ 3773 ];
+  };
 
   users.users.${username} = {
     isNormalUser = true;

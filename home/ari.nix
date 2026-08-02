@@ -46,56 +46,60 @@ in
     homeDirectory = "/home/${username}";
     stateVersion = "26.05";
     packages = with pkgs; [
-      bat
-      eza
-      fzf
-      gitui
-      lazygit
-      nerd-fonts.caskaydia-cove
-      ripgrep
-      starship
-      tree
-      zoxide
-      xdg-terminal-exec
-      screenshot-select
+        bat
+        eza
+        fzf
+        gitui
+        lazygit
+        nerd-fonts.caskaydia-cove
+        ripgrep
+        starship
+        tree
+        zoxide
+        xdg-terminal-exec
+        screenshot-select
 
-      # dev tools
-      nodejs_26
-      jdk25
-      bun
+        # dev tools
+        nodejs_26
+        jdk25
+        bun
 
-      # C dev
-      gcc
+        # C/C++ dev
+        cmake
+        gcc
+        gnumake
+        ninja
 
-      # GitHub CLI
-      gh
 
-      # ai slopfest
-      opencode
+        # GitHub CLI
+        gh
 
-      # Rust dev
-      cargo
-      cargo-tauri
-      clippy
-      rust-analyzer
-      rustc
-      rustfmt
+        # ai slopfest
+        opencode
 
-      # aseprite
-      aseprite
+        # Rust dev
+        cargo
+        cargo-tauri
+        clippy
+        rust-analyzer
+        rustc
+        rustfmt
 
-      # nix
-      nixfmt
+        # aseprite
+        aseprite
 
-      # desktop apps
-      ghostty
-      vesktop
-      kdePackages.dolphin
-      jetbrains-toolbox
-      prismlauncher
-      t3code
-      mongodb-compass
-    ];
+        # nix
+        nixfmt
+
+        # desktop apps
+        ghostty
+        vesktop
+        kdePackages.dolphin
+        jetbrains-toolbox
+        prismlauncher
+        t3code
+        # mongodb-compass
+      ];
 
     sessionVariables = {
       TERMINAL = "ghostty";
