@@ -1,11 +1,34 @@
 {
   config,
   inputs,
+  lib,
   pkgs,
   username,
   ...
 }:
 let
+  nativeLibraries = with pkgs; [
+    glib
+    gtk3
+    at-spi2-core
+    pango
+    harfbuzz
+    cairo
+    gdk-pixbuf
+    webkitgtk_4_1
+    libsoup_3
+    openssl
+  ];
+
+  nativeLibraryClosure = pkgs.lib.closePropagation nativeLibraries;
+
+  pkgConfigPath = pkgs.lib.concatStringsSep ":" [
+    (pkgs.lib.makeSearchPathOutput "dev" "lib/pkgconfig" nativeLibraryClosure)
+    (pkgs.lib.makeSearchPathOutput "out" "lib/pkgconfig" nativeLibraryClosure)
+    (pkgs.lib.makeSearchPathOutput "dev" "share/pkgconfig" nativeLibraryClosure)
+    (pkgs.lib.makeSearchPathOutput "out" "share/pkgconfig" nativeLibraryClosure)
+  ];
+
   screenshot-select = pkgs.writeShellApplication {
     name = "screenshot-select";
     runtimeInputs = with pkgs; [
@@ -45,65 +68,78 @@ in
     inherit username;
     homeDirectory = "/home/${username}";
     stateVersion = "26.05";
-    packages = with pkgs; [
-        bat
-        eza
-        fzf
-        gitui
-        lazygit
-        nerd-fonts.caskaydia-cove
-        ripgrep
-        starship
-        tree
-        zoxide
-        xdg-terminal-exec
-        screenshot-select
+    packages = (with pkgs; [
+      bat
+      eza
+      fzf
+      gitui
+      lazygit
+      nerd-fonts.caskaydia-cove
+      ripgrep
+      starship
+      tree
+      zoxide
+      xdg-terminal-exec
+      screenshot-select
 
-        # dev tools
-        nodejs_26
-        jdk25
-        bun
+      # dev tools
+      nodejs_26
+      jdk25
+      bun
 
-        # C/C++ dev
-        cmake
-        gcc
-        gnumake
-        ninja
+      # C/C++ dev
+      cmake
+      gcc
+      gnumake
+      ninja
 
+      # go
+      go
 
-        # GitHub CLI
-        gh
+      # GitHub CLI
+      gh
 
-        # ai slopfest
-        opencode
+      # ai slopfest
+      opencode
 
-        # Rust dev
-        cargo
-        cargo-tauri
-        clippy
-        rust-analyzer
-        rustc
-        rustfmt
+      # Rust dev
+      cargo
+      cargo-tauri
+      clippy
+      rust-analyzer
+      rustc
+      rustfmt
+      glib
+      pkg-config
+      gtk3
+      at-spi2-core
+      gdk-pixbuf
+      pango
+      cairo
+      webkitgtk_4_1
+      libsoup_3
+      openssl
 
-        # aseprite
-        aseprite
+      # aseprite
+      aseprite
 
-        # nix
-        nixfmt
+      # nix
+      nixfmt
 
-        # desktop apps
-        ghostty
-        vesktop
-        kdePackages.dolphin
-        jetbrains-toolbox
-        prismlauncher
-        t3code
-        # mongodb-compass
-      ];
+      # desktop apps
+      ghostty
+      vesktop
+      kdePackages.dolphin
+      jetbrains-toolbox
+      prismlauncher
+      t3code
+      # mongodb-compass
+    ]) ++ nativeLibraries;
 
     sessionVariables = {
       TERMINAL = "ghostty";
       NPM_CONFIG_PREFIX = "${config.home.homeDirectory}/.npm-global";
+      PKG_CONFIG_PATH = pkgConfigPath;
     };
 
     sessionPath = [
@@ -114,6 +150,21 @@ in
   home.file.".npmrc".text = ''
     prefix=${config.home.homeDirectory}/.npm-global
   '';
+
+  programs.obs-studio = {
+    enable = true;
+
+    plugins = with pkgs.obs-studio-plugins; [
+      wlrobs
+      obs-backgroundremoval
+      obs-pipewire-audio-capture
+      obs-vaapi
+      obs-gstreamer
+      obs-vkcapture
+    ];
+  };
+
+  home.sessionVariables.LIBVA_DRIVER_NAME = "radeonsi";
 
   programs.home-manager.enable = true;
   programs.spicetify.enable = true;

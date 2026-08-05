@@ -72,8 +72,7 @@
           {
             matches = [
               {
-                "device.name" =
-                  "alsa_card.usb-Nacon_RIG_600_PRO_R00300000003-01";
+                "device.name" = "alsa_card.usb-Nacon_RIG_600_PRO_R00300000003-01";
               }
             ];
 
@@ -111,6 +110,7 @@
     fd
     git
     jq
+    libva-utils
     nh
     nixd
     pciutils
@@ -119,5 +119,6 @@
     unzip
     usbutils
     wget
+    vulkan-tools
   ];
 }

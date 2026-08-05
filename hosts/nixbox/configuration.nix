@@ -22,6 +22,14 @@
     firewall.allowedTCPPorts = [ 3773 ];
   };
 
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true; # ???
+  };
+
+  services.xserver.videoDrivers = [ "amdgpu" ];
+  environment.sessionVariables.LIBVA_DRIVER_NAME = "radeonsi";
+
   users.users.${username} = {
     isNormalUser = true;
     description = username;
@@ -29,6 +37,7 @@
       "wheel"
       "networkmanager"
       "video"
+      "render"
       "audio"
       "input"
     ];

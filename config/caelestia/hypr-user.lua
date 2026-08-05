@@ -19,6 +19,23 @@ hl.monitor({
     scale = 1,
 })
 
+-- Keep focus on transient JetBrains dialogs while they are visible.
+hl.window_rule({
+    name = "jetbrains-popup-focus",
+    match = {
+        class = "^jetbrains-.*",
+        float = true,
+    },
+    stay_focused = true,
+})
+
+-- Prevent pointer movement from refocusing a hovered window unexpectedly.
+hl.config({
+    input = {
+        mouse_refocus = false,
+    },
+})
+
 -- default picker is feature-rich but slow to appear. These bindings use
 -- hyprshot directly while retaining both automatic saving and clipboard copy.
 hl.bind("Print", hl.dsp.exec_cmd("hyprshot -m output -m active"))

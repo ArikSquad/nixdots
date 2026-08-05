@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{ pkgs, ... }: {
   boot.plymouth = {
     enable = true;
     theme = "catppuccin-mocha";
