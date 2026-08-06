@@ -108,6 +108,7 @@
     curl
     fastfetch
     fd
+    ffmpeg
     git
     jq
     libva-utils
