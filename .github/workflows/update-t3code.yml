@@ -1,0 +1,87 @@
+name: Update T3 Code
+
+on:
+  schedule:
+    - cron: "31 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Install Nix
+        uses: DeterminateSystems/determinate-nix-action@v3.21.9
+
+      - name: Update T3 Code package
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          release=$(curl --fail --silent --show-error \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/pingdotgg/t3code/releases?per_page=100" \
+            | jq -r '
+              [
+                .[]
+                | select(.draft == false)
+                | .assets[]?
+                | select(.name | endswith("-x86_64.AppImage"))
+                | {name, url: .browser_download_url}
+              ]
+              | first
+              | [.name, .url]
+              | @tsv
+            ')
+
+          read -r asset_name asset_url <<< "$release"
+          if [[ -z "${asset_name:-}" || -z "${asset_url:-}" ]]; then
+            echo "No T3 Code x86_64 AppImage release asset found" >&2
+            exit 1
+          fi
+
+          version="${asset_name#T3-Code-}"
+          version="${version%-x86_64.AppImage}"
+          hash=$(nix store prefetch-file --json "$asset_url" | jq -r .hash)
+
+          VERSION="$version" HASH="$hash" python3 - <<'PY'
+          import os
+          from pathlib import Path
+
+          path = Path("pkgs/t3code.nix")
+          text = path.read_text()
+          lines = text.splitlines(keepends=True)
+
+          def replace_line(prefix, value):
+              for index, line in enumerate(lines):
+                  if line.startswith(prefix):
+                      newline = "\n" if line.endswith("\n") else ""
+                      lines[index] = f'{prefix}{value}";{newline}'
+                      return
+              raise SystemExit(f"Could not find line starting with {prefix!r}")
+
+          replace_line('  version = "', os.environ["VERSION"])
+          replace_line('    hash = "', os.environ["HASH"])
+          path.write_text("".join(lines))
+          PY
+
+      - name: Build T3 Code package
+        run: nix build .#t3code --no-link --print-build-logs
+
+      - name: Open update pull request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          branch: automation/update-t3code
+          delete-branch: true
+          commit-message: "chore: update T3 Code"
+          title: "chore: update T3 Code"
+          body: |
+            Automated update of the T3 Code AppImage pin.
+
+            The package was build-checked with `nix build .#t3code --no-link`.
