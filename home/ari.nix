@@ -128,6 +128,7 @@ in
 
       # desktop apps
       ghostty
+      termius
       vesktop
       kdePackages.dolphin
       jetbrains-toolbox

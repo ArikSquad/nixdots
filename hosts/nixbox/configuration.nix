@@ -30,6 +30,11 @@
   services.xserver.videoDrivers = [ "amdgpu" ];
   environment.sessionVariables.LIBVA_DRIVER_NAME = "radeonsi";
 
+  virtualisation.docker = {
+    enable = true;
+    autoPrune.enable = true;
+  };
+
   users.users.${username} = {
     isNormalUser = true;
     description = username;
@@ -40,6 +45,7 @@
       "render"
       "audio"
       "input"
+      "docker"
     ];
   };
 
