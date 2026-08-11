@@ -133,6 +133,7 @@ in
       kdePackages.dolphin
       jetbrains-toolbox
       prismlauncher
+      chatgpt
       t3code
       # mongodb-compass
     ]) ++ nativeLibraries;

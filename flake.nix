@@ -36,10 +36,12 @@
       username = "ari";
       hostname = "nixbox";
       overlay = final: prev: {
+        chatgpt = final.callPackage ./pkgs/chatgpt.nix { };
         t3code = final.callPackage ./pkgs/t3code.nix { };
       };
       pkgs = import nixpkgs {
         inherit system;
+        config.allowUnfree = true;
         overlays = [ overlay ];
       };
     in
@@ -47,6 +49,7 @@
       overlays.default = overlay;
 
       packages.${system} = {
+        chatgpt = pkgs.chatgpt;
         t3code = pkgs.t3code;
         default = pkgs.t3code;
       };
