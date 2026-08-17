@@ -29,6 +29,38 @@ let
     (pkgs.lib.makeSearchPathOutput "out" "share/pkgconfig" nativeLibraryClosure)
   ];
 
+  davinci-resolve-base = pkgs.davinci-resolve;
+
+  davinci-resolve-fontconfig = pkgs.writeText "davinci-resolve-fontconfig.conf" ''
+    <?xml version="1.0"?>
+    <!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
+    <fontconfig>
+      <include>/etc/fonts/fonts.conf</include>
+      <dir>/usr/share/fonts</dir>
+    </fontconfig>
+  '';
+
+  davinci-resolve = pkgs.symlinkJoin {
+    name = "davinci-resolve";
+    paths = [
+      (pkgs.buildFHSEnv (
+        lib.removeAttrs davinci-resolve-base.passthru.args [ "passthru" ]
+        // {
+          targetPkgs = fhsPkgs:
+            (davinci-resolve-base.passthru.args.targetPkgs fhsPkgs) ++ [ pkgs.mojangles ];
+          extraBwrapArgs =
+            (davinci-resolve-base.passthru.args.extraBwrapArgs or [ ])
+            ++ [ "--setenv FONTCONFIG_FILE ${davinci-resolve-fontconfig}" ];
+        }
+      ))
+    ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram "$out/bin/davinci-resolve" \
+        --set QT_QPA_PLATFORM xcb
+    '';
+  };
+
   screenshot-select = pkgs.writeShellApplication {
     name = "screenshot-select";
     runtimeInputs = with pkgs; [
@@ -74,6 +106,7 @@ in
       fzf
       gitui
       lazygit
+      mojangles
       nerd-fonts.caskaydia-cove
       ripgrep
       starship
@@ -127,6 +160,7 @@ in
       nixfmt
 
       # desktop apps
+      davinci-resolve
       ghostty
       termius
       vesktop
@@ -151,6 +185,23 @@ in
 
   home.file.".npmrc".text = ''
     prefix=${config.home.homeDirectory}/.npm-global
+  '';
+
+  # Resolve runs in an FHS environment and scans the standard user font path.
+  home.file.".local/share/fonts/Mojangles.ttf".source =
+    "${pkgs.mojangles}/share/fonts/truetype/Mojangles.ttf";
+
+  home.file.".local/share/applications/davinci-resolve.desktop".text = ''
+    [Desktop Entry]
+    Name=DaVinci Resolve
+    GenericName=Video Editor
+    Exec=${davinci-resolve}/bin/davinci-resolve %U
+    Icon=davinci-resolve
+    Terminal=false
+    Type=Application
+    Categories=AudioVideo;AudioVideoEditing;Video;Graphics;
+    StartupNotify=true
+    StartupWMClass=resolve
   '';
 
   programs.obs-studio = {

@@ -37,6 +37,7 @@
       hostname = "nixbox";
       overlay = final: prev: {
         chatgpt = final.callPackage ./pkgs/chatgpt.nix { };
+        mojangles = final.callPackage ./pkgs/mojangles.nix { };
         t3code = final.callPackage ./pkgs/t3code.nix { };
       };
       pkgs = import nixpkgs {
@@ -50,6 +51,7 @@
 
       packages.${system} = {
         chatgpt = pkgs.chatgpt;
+        mojangles = pkgs.mojangles;
         t3code = pkgs.t3code;
         default = pkgs.t3code;
       };

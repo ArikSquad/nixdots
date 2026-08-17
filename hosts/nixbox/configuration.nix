@@ -20,12 +20,17 @@
   networking = {
     hostName = hostname;
     firewall.allowedTCPPorts = [ 3773 ];
+    firewall.trustedInterfaces = [ "tailscale0" ];
   };
+
+  services.tailscale.enable = true;
 
   hardware.graphics = {
     enable = true;
     enable32Bit = true; # ???
   };
+
+  hardware.amdgpu.opencl.enable = true;
 
   services.xserver.videoDrivers = [ "amdgpu" ];
   environment.sessionVariables.LIBVA_DRIVER_NAME = "radeonsi";
