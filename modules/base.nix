@@ -37,8 +37,9 @@
     LC_TIME = "en_US.UTF-8";
   };
   services.xserver.xkb = {
-    layout = "fi";
-    variant = "";
+    layout = "fi,ru";
+    variant = ",phonetic";
+    options = "grp:alt_shift_toggle";
   };
 
   # lowkey i dont like this here?
