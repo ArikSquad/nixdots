@@ -164,6 +164,9 @@ in
       ghostty
       termius
       vesktop
+      adw-gtk3
+      papirus-icon-theme
+      qtengine
       kdePackages.dolphin
       jetbrains-toolbox
       prismlauncher
@@ -219,6 +222,10 @@ in
 
   home.sessionVariables.LIBVA_DRIVER_NAME = "radeonsi";
 
+  # Keep Qt's platform theme plugin discoverable for Qt 6 applications.
+  # Caelestia generates the matching dark palette in ~/.config/qtengine.
+  home.sessionSearchVariables.QT_PLUGIN_PATH = [ "${pkgs.qtengine}/lib/qt-6/plugins" ];
+
   programs.home-manager.enable = true;
   programs.spicetify.enable = true;
   fonts.fontconfig.enable = true;
@@ -272,7 +279,10 @@ in
       bar.status.showBattery = false;
       paths.wallpaperDir = "${config.home.homeDirectory}/Pictures/Wallpapers";
     };
-    cli.settings.theme.enableGtk = true;
+    cli.settings.theme = {
+      enableGtk = true;
+      enableQt = true;
+    };
   };
 
   programs.git = {

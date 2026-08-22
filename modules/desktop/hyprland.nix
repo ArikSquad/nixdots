@@ -17,6 +17,7 @@
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1";
     QT_QPA_PLATFORM = "wayland;xcb";
+    QT_QPA_PLATFORMTHEME = "qtengine";
     QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
     SDL_VIDEODRIVER = "wayland";
     XDG_CURRENT_DESKTOP = "Hyprland";
