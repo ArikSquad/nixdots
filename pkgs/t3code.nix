@@ -8,11 +8,11 @@
 
 let
   pname = "t3code";
-  version = "0.0.39-nightly.20260904.1277";
+  version = "0.0.39-nightly.20260905.1286";
 
   src = fetchurl {
     url = "https://github.com/pingdotgg/t3code/releases/download/v${version}/T3-Code-${version}-x86_64.AppImage";
-    hash = "sha256-xB8n49cLczv9BOyXAqwaIo3zLwBo/XiVNfoh4tAx5jM=";
+    hash = "sha256-X4ZTXLz0omED1W5L9MmvqTHT6KxIIbUWXL7+g8XzK8o=";
   };
 
   app = appimageTools.wrapType2 {
